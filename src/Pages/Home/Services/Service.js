@@ -1,4 +1,5 @@
 import React from 'react';
+import PrimaryButton from '../../../component/PrimaryButton';
 
 const Service = ({service}) => {
     const {name, description, img} = service
@@ -11,7 +12,7 @@ const Service = ({service}) => {
     <h2 className="card-title">{name}</h2>
     <p>{description}</p>
     <div className="card-actions">
-      <button className="btn btn-primary">Buy Now</button>
+     <PrimaryButton>Buy Now</PrimaryButton>
     </div>
   </div>
 </div>

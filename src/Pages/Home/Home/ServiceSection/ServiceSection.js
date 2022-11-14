@@ -1,5 +1,6 @@
 import React from 'react';
 import treatment from '../../../../assets/images/treatment.png'
+import PrimaryButton from '../../../../component/PrimaryButton';
 
 const ServiceSection = () => {
     return (
@@ -16,7 +17,7 @@ const ServiceSection = () => {
 				
 			</p>
 			<div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
-            <button className="btn bg-gradient-to-r from-secondary to-primary text-white border-0">Get Started</button>
+            <PrimaryButton>Get Started</PrimaryButton>
 			</div>
 		</div>
 	</div>
