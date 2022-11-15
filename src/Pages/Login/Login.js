@@ -32,7 +32,7 @@ const Login = () => {
         </div>
       <input className='btn btn-accent w-full' value="Login" type="submit" />
     </form>
-    <p>New to Doctors Portal? <Link className='text-secondary' to='signup'>Create an Account</Link></p>
+    <p>New to Doctors Portal? <Link className='text-secondary' to='/signup'>Create an Account</Link></p>
     <div className='divider'>OR</div>
     <button className='btn btn-outline w-full'>CONTINUE WITH GOOGLE</button>
             </div>
