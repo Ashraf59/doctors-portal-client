@@ -1,17 +1,37 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthProvider';
 
 const SignUp = () => {
+    const {createUser, updateUser} = useContext(AuthContext);
 
     const {register, handleSubmit, formState: { errors }} = useForm();
 
+    const [signOutError, setSignOutError] = useState();
+
     const handleSignUp = (data) => {
-        console.log(data)
+        setSignOutError('');
+        createUser(data.email, data.password)
+        .then( result => {
+            const user = result.user;
+            console.log(user)
+            const userInfo = {
+                displayName: data.name 
+            }
+            updateUser (userInfo)
+            .then(() => {})
+            .catch(error => console.log(error))
+        })
+        .catch(error => {
+            console.error(error.message)
+            setSignOutError(error.message)
+        })
+        
     }
     return (
         <div className='h-[500px]  flex justify-center items-center '>
-        <div className='w-96 p-7'>
+        <div className='w-96 p-7 shadow shadow-slate-500 mt-10 rounded-lg'>
             <h2 className='text-4xl text-center'>Sign Up</h2>
             <form onSubmit={handleSubmit(handleSignUp)}>
   
@@ -35,7 +55,10 @@ const SignUp = () => {
         {errors.password && <p className='text-red-500'>{errors.password.message}</p>}
         
     </div>
-  <input className='btn btn-accent w-full' value="Sign Up" type="submit" />
+  <input className='btn btn-accent w-full my-4' value="Sign Up" type="submit" />
+  <div>
+    {signOutError && <p className='text-red-600'>{signOutError}</p>}
+  </div>
 </form>
 <p>Already have an account? <Link className='text-secondary' to='/login'>Please login</Link></p>
 <div className='divider'>OR</div>
