@@ -1,10 +1,12 @@
 import { format } from 'date-fns/esm';
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from '../../../context/AuthProvider';
 
 const BookingModal = ({treatment, selectedDate, setTreatment}) => {
     //Treatment is just another name of appointmentOption.js file
     const {name, slots} = treatment;
     const date = format(selectedDate, 'PP');
+    const {user} = useContext(AuthContext);
     const handleBooking = event => {
         event.preventDefault();
         const form = event.target;
@@ -41,8 +43,8 @@ const BookingModal = ({treatment, selectedDate, setTreatment}) => {
 
         }
     </select>
-    <input name='name' type="text" placeholder="Your name" className="input w-full input-bordered " />
-    <input name='email' type="text" placeholder="Email Address" className="input w-full input-bordered " />
+    <input name='name' type="text" defaultValue={user?.displayName} disabled placeholder="Your name" className="input w-full input-bordered " />
+    <input name='email' type="text" defaultValue={user?.email} disabled placeholder="Email Address" className="input w-full input-bordered " />
     <input name='phone' type="text" placeholder="Your phone" className="input w-full input-bordered " />
     <input type="text" placeholder="Type here" className="input w-full input-bordered " />
     <br />
