@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthProvider';
+import useToken from '../../hooks/useToken';
 
 const SignUp = () => {
     const {createUser, updateUser} = useContext(AuthContext);
@@ -9,9 +10,16 @@ const SignUp = () => {
     const {register, handleSubmit, formState: { errors }} = useForm();
 
     const [signOutError, setSignOutError] = useState('');
+    const [createdUserEmail, setCreatedUserEmail] = useState('');
+    const [token] = useToken(createdUserEmail);
     const navigate = useNavigate();
 
+    if(token){
+        navigate('/')
+    }
+
     const handleSignUp = (data) => {
+        console.log(data);
         setSignOutError('');
         createUser(data.email, data.password)
         .then( result => {
@@ -21,8 +29,11 @@ const SignUp = () => {
                 displayName: data.name 
             }
             updateUser (userInfo)
+
             .then(() => {
+                console.log(data.name, data.email);
                 saveUser(data.name, data.email);
+                
             })
             .catch(error => console.log(error))
         })
@@ -44,11 +55,12 @@ const SignUp = () => {
         })
         .then(res => res.json())
         .then(data => {
-            console.log('saveUser',data);
-            navigate('/')
+            setCreatedUserEmail(email)
 
         })
     }
+
+    
     return (
         <div className='h-[500px]  flex justify-center items-center '>
         <div className='w-96 p-7 shadow shadow-slate-500 mt-10 rounded-lg'>
