@@ -6,7 +6,8 @@ import { AuthContext } from '../../../context/AuthProvider';
 const BookingModal = ({treatment, selectedDate, setTreatment, refetch}) => {
     //Treatment is just another name of appointmentOption.js 
     console.log(treatment);
-    const {name: treatmentName, slots} = treatment;
+    const {name: treatmentName, slots, price} = treatment;
+    // console.log(treatment);
     const date = format(selectedDate, 'PP');
     const {user} = useContext(AuthContext);
     const handleBooking = event => {
@@ -23,7 +24,8 @@ const BookingModal = ({treatment, selectedDate, setTreatment, refetch}) => {
             patient: name,
             slot,
             email,
-            phone
+            phone,
+            price
         }
 
         fetch('http://localhost:5000/bookings', {
