@@ -13,7 +13,7 @@ const AddDoctor = () => {
     const {data: specialities, isLoading} = useQuery({
         queryKey: ['speciality'],
         queryFn: async () => {
-            const res = await fetch('http://localhost:5000/appointmentSpeciality')
+            const res = await fetch('https://doctors-portal-server-two-roan.vercel.app/appointmentSpeciality')
             const data = await res.json();
             return data
         }
@@ -43,7 +43,7 @@ const AddDoctor = () => {
 
                 //Save doctors information to the MongoDB 
 
-                fetch('http://localhost:5000/doctors', {
+                fetch('https://doctors-portal-server-two-roan.vercel.app/doctors', {
                     method: 'POST',
                     headers: {
                         'content-type' : 'application/json',
