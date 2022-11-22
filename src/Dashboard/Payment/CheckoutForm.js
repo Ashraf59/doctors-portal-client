@@ -4,10 +4,13 @@ import React, { useEffect, useState } from 'react';
 
 const CheckoutForm = ({booking}) => {
     const [cardError, setCardError] = useState('');
+    const [success, setSuccess] = useState('');
+    const [processing, setProcessing] = useState(false);
+    const [transactionId, setTransactionId] = useState('')
     const [clientSecret, setClientSecret] = useState("");
     const stripe = useStripe();
     const elements = useElements();
-    const {price, email, patient} = booking;
+    const {price, email, patient, _id} = booking;
 
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
@@ -46,6 +49,8 @@ const CheckoutForm = ({booking}) => {
         else{
             setCardError('');
         }
+        setSuccess('');
+        setProcessing(true)
 
         const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(
             clientSecret,
@@ -64,7 +69,34 @@ const CheckoutForm = ({booking}) => {
             setCardError(confirmError.message)
             return;
           }
-          console.log('paymentIntent',paymentIntent);
+
+          if(paymentIntent.status === 'succeeded'){
+            setSuccess('Congrats! your payment has been succeeded');
+            setTransactionId(paymentIntent.id)
+
+            const payment = {
+              price,
+              transactionId: paymentIntent.id,
+              email,
+              bookingId: _id
+            }
+            fetch('http://localhost:5000/payments', {
+              method: 'POST',
+              headers: {
+                'content-type' : 'application/json',
+                authorization: `bearer ${localStorage.getItem('accessToken')}`
+              },
+              body: JSON.stringify(payment)
+            })
+            .then(res => res.json())
+            .then(data => {
+              if(data.insertedId){
+
+              }
+            })
+          }
+
+          setProcessing(false)
 
     }
     return (
@@ -86,11 +118,17 @@ const CheckoutForm = ({booking}) => {
             },
           }}
         />
-        <button className='btn btn-primary mt-6 text-white' type="submit" disabled={!stripe || !clientSecret}>
+        <button className='btn btn-primary mt-6 text-white' type="submit" disabled={!stripe || !clientSecret || processing}>
           Pay
         </button>
       </form>
       <p className="text-red-500">{cardError}</p>
+      {
+        success && <div>
+          <p className="text-green-500">{success}</p>
+          <p>Your transactionId: <span className='font-bold'>{transactionId}</span></p>
+        </div>
+      }
         </>
     );
 };
